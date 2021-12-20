@@ -1,29 +1,12 @@
-/**
- * The app navigator (formerly "AppNavigator" and "MainNavigator") is used for the primary
- * navigation flows of your app.
- * Generally speaking, it will contain an auth flow (registration, login, forgot password)
- * and a "main" flow which the user will use once logged in.
- */
 import React from "react"
-import { useColorScheme } from "react-native"
+import { ImageStyle, TextStyle, useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { HomeScreen, TimelinesScreen, AddEntryScreen } from "../screens"
 import { navigationRef } from "./navigation-utilities"
+import { Icon } from "../components"
 
-/**
- * This type allows TypeScript to know what routes are defined in this navigator
- * as well as what properties (if any) they might take when navigating to them.
- *
- * If no params are allowed, pass through `undefined`. Generally speaking, we
- * recommend using your MobX-State-Tree store(s) to keep application state
- * rather than passing state through navigation params.
- *
- * For more information, see this documentation:
- *   https://reactnavigation.org/docs/params/
- *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
- */
 export type NavigatorParamList = {
   welcome: undefined
   demo: undefined
@@ -35,19 +18,52 @@ export type NavigatorParamList = {
   AppTabs: undefined
 }
 
-// Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Tabs = createBottomTabNavigator<NavigatorParamList>()
+
+const ICON: ImageStyle = { height: 30, width: 30 }
 
 const AppTabs = () => {
   return (
     <Tabs.Navigator
       screenOptions={{
         headerShown: false,
+        tabBarActiveTintColor: "green",
+        tabBarLabelStyle: { fontWeight: "bold", paddingHorizontal: 4 },
+        tabBarLabelPosition: "beside-icon",
+        tabBarActiveBackgroundColor: "#BFEEB7",
       }}
       initialRouteName="home"
     >
-      <Tabs.Screen name="home" component={HomeScreen} />
-      <Tabs.Screen name="timelines" component={TimelinesScreen} />
+      <Tabs.Screen
+        name="home"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: "Home",
+          // eslint-disable-next-line react/display-name
+          tabBarIcon: ({ focused }): React.ReactElement =>
+            focused ? (
+              <Icon icon="homeLight" style={ICON} />
+            ) : (
+              <Icon icon="homeDark" style={ICON} />
+            ),
+          tabBarItemStyle: { borderTopRightRadius: 10, borderBottomRightRadius: 10 },
+        }}
+      />
+      <Tabs.Screen
+        name="timelines"
+        component={TimelinesScreen}
+        options={{
+          tabBarLabel: "Timelines",
+          // eslint-disable-next-line react/display-name
+          tabBarIcon: ({ focused }): React.ReactElement =>
+            focused ? (
+              <Icon icon="timelineLight" style={ICON} />
+            ) : (
+              <Icon icon="timelineDark" style={ICON} />
+            ),
+          tabBarItemStyle: { borderTopLeftRadius: 10, borderBottomLeftRadius: 10 },
+        }}
+      />
     </Tabs.Navigator>
   )
 }
@@ -63,7 +79,7 @@ const AppStack = () => {
       initialRouteName="AppTabs"
     >
       <Stack.Screen name="AppTabs" component={AppTabs} />
-      <Stack.Screen name="addEntry" component={AddEntryScreen} />
+      <Stack.Screen name="addEntry" component={AddEntryScreen} options={{ headerShown: true }} />
     </Stack.Navigator>
   )
 }
