@@ -7,8 +7,9 @@
 import React from "react"
 import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { WelcomeScreen, DemoScreen, DemoListScreen } from "../screens"
+import { HomeScreen, TimelinesScreen, AddEntryScreen } from "../screens"
 import { navigationRef } from "./navigation-utilities"
 
 /**
@@ -27,9 +28,30 @@ export type NavigatorParamList = {
   welcome: undefined
   demo: undefined
   demoList: undefined
+  home: undefined
+  timelines: undefined
+  addEntry: undefined
+  AppStack: undefined
+  AppTabs: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
+const Tabs = createBottomTabNavigator<NavigatorParamList>()
+
+const AppTabs = () => {
+  return (
+    <Tabs.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+      initialRouteName="home"
+    >
+      <Tabs.Screen name="home" component={HomeScreen} />
+      <Tabs.Screen name="timelines" component={TimelinesScreen} />
+    </Tabs.Navigator>
+  )
+}
+
 const Stack = createNativeStackNavigator<NavigatorParamList>()
 
 const AppStack = () => {
@@ -38,11 +60,10 @@ const AppStack = () => {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="welcome"
+      initialRouteName="AppTabs"
     >
-      <Stack.Screen name="welcome" component={WelcomeScreen} />
-      <Stack.Screen name="demo" component={DemoScreen} />
-      <Stack.Screen name="demoList" component={DemoListScreen} />
+      <Stack.Screen name="AppTabs" component={AppTabs} />
+      <Stack.Screen name="addEntry" component={AddEntryScreen} />
     </Stack.Navigator>
   )
 }
