@@ -53,7 +53,7 @@ const AppTabs = () => {
         name="timelines"
         component={TimelinesScreen}
         options={{
-          tabBarLabel: "Timelines",
+          tabBarLabel: "Timeline",
           // eslint-disable-next-line react/display-name
           tabBarIcon: ({ focused }): React.ReactElement =>
             focused ? (
